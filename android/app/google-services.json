@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "899702442365",
+    "project_id": "teachspere-11e54",
+    "storage_bucket": "teachspere-11e54.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:899702442365:android:aad28322e1807a38002414",
+        "android_client_info": {
+          "package_name": "com.example.delivery_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARXmLr-xfbIkVJU9MuD7nBGshU5oW2KDg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
