@@ -1,4 +1,3 @@
-import 'package:delivery_app/ui/screens/homeScreen/homeScreen_desktop.dart';
 import 'package:delivery_app/ui/screens/homeScreen/homeScreen_mobile.dart';
 import 'package:delivery_app/ui/screens/homeScreen/home_screen_provider.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +13,7 @@ class HomeScreen extends StatelessWidget {
       create: (context) => HomeScreenProvider(),
       child: Scaffold(
         body: ScreenTypeLayout.builder(
-          desktop: (_) => HomeScreenDesktop(),
+         // desktop: (_) => HomeScreenDesktop(),
          // tablet: (_) => HomeScreenTablet(),
           mobile: (_) => HomeScreenMobile(),
         )
@@ -23,3 +22,4 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
+

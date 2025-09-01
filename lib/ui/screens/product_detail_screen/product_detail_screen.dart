@@ -6,7 +6,7 @@ import 'package:delivery_app/ui/screens/my_cart/my_cart_screen_mobile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:badges/badges.dart' as badges;
-import 'add_to_cart_screen_provider.dart';
+import 'product_detail_provider.dart';
 
 class ProductDetailScreenMobile extends StatelessWidget {
   final Item item;
@@ -33,75 +33,48 @@ class ProductDetailScreenMobile extends StatelessWidget {
                       _buildProductInfo(),
                       SizedBox(height: 20),
                       _buildAboutSection(),
-                      SizedBox(height: 25),
-                      if (item.variations != null &&
-                          item.variations!.isNotEmpty)
-                        _buildVariationsSection(model),
-                      if (item.addons != null && item.addons!.isNotEmpty)
-                        _buildAddonsSection(model),
+                      SizedBox(height: 25),               
                       _buildTechnicalSpecs(),
-                      SizedBox(height: 25),
-                      _buildUserReviews(),
-                      SizedBox(height: 100),
+                      SizedBox(height: 22),
                       Container(
-                        padding: EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Colors.black12,
-                              blurRadius: 10,
-                              offset: Offset(0, -5),
-                            ),
-                          ],
-                        ),
+              
                         child: SafeArea(
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Row(
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    'Quantity:',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  SizedBox(width: 12),
-                                  CounterWidget(
-                                    count: model.orderItem.quantity,
-                                    onChanged: model.updateQuantity,
-                                  ),
-                                  Spacer(),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Text(
                                         'Total Price',
                                         style: TextStyle(
-                                          fontSize: 12,
+                                          fontSize: 14,
                                           color: Colors.grey[600],
                                         ),
                                       ),
-                                      TweenAnimationBuilder<double>(
-                                        duration: Duration(milliseconds: 300),
-                                        tween: Tween<double>(
-                                          begin: 0,
-                                          end: model.orderItem.totalPrice,
-                                        ),
-                                        builder: (context, value, child) {
-                                          return Text(
-                                            '\$${value.toStringAsFixed(2)}',
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
-                                              color: Color(0xFF4A90E2),
-                                            ),
-                                          );
-                                        },
-                                      ),
                                     ],
+                                  ),
+                                  TweenAnimationBuilder<double>(
+                                    duration: Duration(milliseconds: 300),
+                                    tween: Tween<double>(
+                                      begin: 0,
+                                      end: model.orderItem.totalPrice,
+                                    ),
+                                    builder: (context, value, child) {
+                                      return Text(
+                                        '\$${value.toStringAsFixed(2)}',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFF4A90E2),
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ],
                               ),
@@ -255,6 +228,7 @@ class ProductDetailScreenMobile extends StatelessWidget {
                           ),
                         ),
                       ), // Space for bottom buttons
+                    
                     ],
                   ),
                 ),
@@ -385,31 +359,31 @@ class ProductDetailScreenMobile extends StatelessWidget {
                 color: Color(0xFF4A90E2),
               ),
             ),
-            SizedBox(width: 8),
-            Text(
-              '\$1999.99',
-              style: TextStyle(
-                fontSize: 16,
-                decoration: TextDecoration.lineThrough,
-                color: Colors.grey[500],
-              ),
-            ),
-            SizedBox(width: 8),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: Colors.red[100],
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Text(
-                '10% OFF',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.red[700],
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
+            // SizedBox(width: 8),
+            // Text(
+            //   '\$1999.99',
+            //   style: TextStyle(
+            //     fontSize: 16,
+            //     decoration: TextDecoration.lineThrough,
+            //     color: Colors.grey[500],
+            //   ),
+            // ),
+            // SizedBox(width: 8),
+            // Container(
+            //   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            //   decoration: BoxDecoration(
+            //     color: Colors.red[100],
+            //     borderRadius: BorderRadius.circular(12),
+            //   ),
+            //   child: Text(
+            //     '10% OFF',
+            //     style: TextStyle(
+            //       fontSize: 12,
+            //       color: Colors.red[700],
+            //       fontWeight: FontWeight.bold,
+            //     ),
+            //   ),
+            // ),
           ],
         ),
         SizedBox(height: 12),
@@ -635,15 +609,11 @@ class ProductDetailScreenMobile extends StatelessWidget {
           ),
         ),
         SizedBox(height: 15),
-        _buildSpecRow('Display', '6.7 Inch Super AMOLED'),
-        _buildSpecRow('Processor', 'Snapdragon 8 Gen 3'),
-        _buildSpecRow('RAM', '12GB LPDDR5X'),
-        _buildSpecRow('Storage', '256GB UFS 4.0'),
-        _buildSpecRow('Camera', '50MP OIS + 12MP UW + 10MP Tele'),
-        _buildSpecRow('Battery', '5000 mAh'),
-        _buildSpecRow('Operating System', 'Android 14'),
-        _buildSpecRow('Connectivity', '5G, Wi-Fi 7, Bluetooth 5.4'),
-        _buildSpecRow('Weight', '198g'),
+        ...List.generate(item.technicalSpecs.entries.length, (index) {
+          var entry = item.technicalSpecs.entries.elementAt(index);
+          return _buildSpecRow(entry.key, entry.value);
+        }),
+       
       ],
     );
   }

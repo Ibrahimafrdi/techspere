@@ -80,7 +80,9 @@ class DatabaseServices {
 
   Future<void> createOrder(OrderModel order) async {
     try {
-      await firestore.collection(ordersCollection).doc().set(order.toJson());
+      final String orderId = await getNextOrderId();
+      order.id = orderId;
+      await firestore.collection(ordersCollection).doc(orderId).set(order.toJson());
     } catch (e) {
       print('Error creating order: $e');
       throw Exception('Failed to create order');
@@ -114,6 +116,30 @@ class DatabaseServices {
             .map((doc) =>
                 OrderModel.fromJson(doc.data() as Map<String, dynamic>, doc.id))
             .toList());
+  }
+
+  Future<String> getNextOrderId() async {
+    try {
+      final counterRef = firestore.collection('counters').doc('orders');
+      final counterDoc = await counterRef.get();
+
+      if (!counterDoc.exists) {
+        // Initialize counter if it doesn't exist
+        await counterRef.set({'last_id': 1});
+        return '1';
+      }
+
+      final lastId = counterDoc.data()?['last_id'] ?? 0;
+      final nextId = lastId + 1;
+
+      // Update the counter
+      await counterRef.update({'last_id': nextId});
+
+      return nextId.toString();
+    } catch (e) {
+      print('Error getting next sale ID: $e');
+      throw e;
+    }
   }
 
   Stream<Favorites?> getFavorites(String userId) {

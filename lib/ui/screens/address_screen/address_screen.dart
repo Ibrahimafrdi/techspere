@@ -1,6 +1,4 @@
-import 'package:delivery_app/ui/screens/address_screen/address_desktop.dart';
 import 'package:delivery_app/ui/screens/address_screen/address_mobile.dart';
-import 'package:delivery_app/ui/screens/homeScreen/homeScreen_desktop.dart';
 import 'package:delivery_app/ui/screens/homeScreen/homeScreen_mobile.dart';
 import 'package:delivery_app/ui/screens/homeScreen/home_screen_provider.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +15,7 @@ class AddressScreen extends StatelessWidget {
       child: Scaffold(
         body: ScreenTypeLayout(
           mobile: AddressScreenMobile(),
-          desktop: AddressScreenDesktop(),
+          // desktop: AddressScreenDesktop(),
         ),
       ),
     );

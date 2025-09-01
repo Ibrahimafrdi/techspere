@@ -1,3 +1,4 @@
+
 import 'package:delivery_app/core/models/addon.dart';
 import 'package:delivery_app/core/models/variation.dart';
 
@@ -11,6 +12,7 @@ class Item {
   String? description;
   String? caution;
   String? imageUrl;
+  Map<String, String> technicalSpecs = {};
   List<Variation>? variations;
   List<Addon>? addons;
 
@@ -26,34 +28,28 @@ class Item {
     this.imageUrl,
     this.variations,
     this.addons,
+    this.technicalSpecs = const {},
   });
-
-  @override
-  String toString() {
-    return 'Item(id: $id, title: $title, price: $price, available: $isAvailable)';
-  }
-
 
   factory Item.fromJson(Map<String, dynamic> json, [id]) {
     return Item(
-      id: id,
-      title: json['title'] as String?,
-      categoryId: json['categoryId'] as String?,
-      price: (json['price'] is int)
-          ? (json['price'] as int).toDouble()
-          : json['price'] as double?,
-      isAvailable: json['isAvailable'] ?? true,
-      isFeatured: json['isFeatured'] as bool?,
-      description: json['description'] as String?,
-      caution: json['caution'] as String?,
-      imageUrl: json['imageUrl'] as String?,
-      variations: (json['variations'] as List<dynamic>?)
-          ?.map((e) => Variation.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      addons: (json['addons'] as List<dynamic>?)
-          ?.map((e) => Addon.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
+        id: id ?? json['id'] as String?,
+        title: json['title'] as String?,
+        categoryId: json['categoryId'] as String?,
+        price: json['price'].toDouble(),
+        isAvailable: json['isAvailable'] ?? true,
+        isFeatured: json['isFeatured'] as bool?,
+        description: json['description'] as String?,
+        caution: json['caution'] as String?,
+        imageUrl: json['imageUrl'] as String?,
+        variations: (json['variations'] as List<dynamic>?)
+            ?.map((e) => Variation.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        addons: (json['addons'] as List<dynamic>?)
+            ?.map((e) => Addon.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        technicalSpecs: Map<String, String>.from(
+            json['technicalSpecs'] ?? <String, String>{}));
   }
 
   Map<String, dynamic> toJson() {
@@ -69,6 +65,7 @@ class Item {
       'imageUrl': imageUrl,
       'variations': variations?.map((e) => e.toJson()).toList(),
       'addons': addons?.map((e) => e.toJson()).toList(),
+      'technicalSpecs': technicalSpecs,
     };
   }
 }

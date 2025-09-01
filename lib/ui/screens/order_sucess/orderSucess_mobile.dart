@@ -54,7 +54,7 @@ class OrderSuccessScreenMobile extends StatelessWidget {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: Colors.orange,
+                     color: Color(0xFF4A90E2),
                     width: 1.5,
                   ),
                 ),
@@ -62,7 +62,7 @@ class OrderSuccessScreenMobile extends StatelessWidget {
                   child: Text(
                     "Done",
                     style: TextStyle(
-                      color: Colors.orange,
+                      color: Color(0xFF4A90E2),
                       fontWeight: FontWeight.bold,
                       fontSize: 22,
                     ),

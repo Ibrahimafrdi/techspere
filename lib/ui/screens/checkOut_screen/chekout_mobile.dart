@@ -385,7 +385,7 @@ class CheckoutScreenMobile extends StatelessWidget {
                                   Text(
                                     'Rs. ${orderItem.totalPrice.toStringAsFixed(2)}',
                                     style: TextStyle(
-                                      color: Colors.orange,
+                                       color: Color(0xFF4A90E2),
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),

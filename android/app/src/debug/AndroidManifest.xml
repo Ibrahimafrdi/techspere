@@ -2,7 +2,7 @@
     <application
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:label="delivery_app">
+        android:label="TechSpere">
 
         <meta-data
             android:name="firebase_app_check_provider_debug"

@@ -284,7 +284,7 @@ class _OrderStatusScreenMobileState extends State<OrderStatusScreenMobile> {
                                 ),
                                 SizedBox(height: 4),
                                 Text(
-                                  "#${orderModel.id?.substring(0, 8)}",
+                                  "#${orderModel.id}",
                                   style: TextStyle(
                                     color: primaryColor,
                                     fontSize: 18,
@@ -820,7 +820,7 @@ class _OrderStatusScreenMobileState extends State<OrderStatusScreenMobile> {
                                             fit: BoxFit.cover,
                                           )
                                               : Image.asset(
-                                            'assets/images/wings.png.png',
+                                            'assets/images/macbook 14.jpg',
                                             fit: BoxFit.cover,
                                           ),
                                         ),
@@ -860,7 +860,7 @@ class _OrderStatusScreenMobileState extends State<OrderStatusScreenMobile> {
                                                   Text(
                                                     'Rs. ${orderItem.totalPrice.toStringAsFixed(2)}',
                                                     style: TextStyle(
-                                                      color: Colors.orange,
+                                                      color: Color(0xFF4A90E2),
                                                       fontWeight:
                                                       FontWeight.w600,
                                                     ),
@@ -938,7 +938,7 @@ class _OrderStatusScreenMobileState extends State<OrderStatusScreenMobile> {
                                 fontSize: 16, color: Colors.grey.shade700),
                             amountStyle: TextStyle(
                               fontSize: 16,
-                              color: Colors.orange,
+                              color: Color(0xFF4A90E2),
                               fontWeight: FontWeight.bold,
                             ),
                           ),

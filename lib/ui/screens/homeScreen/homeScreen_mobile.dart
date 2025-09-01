@@ -7,10 +7,10 @@ import 'package:delivery_app/core/models/items/item.dart';
 import 'package:delivery_app/core/models/order_item.dart';
 import 'package:delivery_app/main.dart';
 import 'package:delivery_app/ui/custom_widgets/counter_widget.dart';
-import 'package:delivery_app/ui/screens/add_to_cart/addtocart_mobile.dart';
+import 'package:delivery_app/ui/screens/product_detail_screen/product_detail_screen.dart';
 import 'package:delivery_app/ui/screens/address_screen/my_address_screen.dart';
 import 'package:delivery_app/ui/screens/auth_screens/sign_in/signin_mobile.dart';
-import 'package:delivery_app/ui/screens/extre_screen.dart';
+import 'package:delivery_app/ui/screens/device_finder_screen/device_finder_screen.dart';
 import 'package:delivery_app/ui/screens/favorite_screen/favortie_mobile.dart';
 import 'package:delivery_app/ui/screens/homeScreen/home_screen_provider.dart';
 import 'package:delivery_app/ui/screens/my_cart/my_cart_screen_mobile.dart';
@@ -37,14 +37,14 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final itemsModel = Provider.of<ItemsProvider>(context, listen: false);
-      final homeScreenModel = Provider.of<HomeScreenProvider>(context, listen: false);
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   final itemsModel = Provider.of<ItemsProvider>(context, listen: false);
+    //   final homeScreenModel = Provider.of<HomeScreenProvider>(context, listen: false);
 
-      if (itemsModel.categories.isNotEmpty) {
-        homeScreenModel.setSelectedCategory(itemsModel.categories.first.id!);
-      }
-    });
+    //   if (itemsModel.categories.isNotEmpty) {
+    //     homeScreenModel.setSelectedCategory(itemsModel.categories.first.id!);
+    //   }
+    // });
   }
 
   void _handleAuthenticationRequired(BuildContext context) {
@@ -54,6 +54,145 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
         builder: (context) => SignInScreen(),
       ),
     );
+  }
+
+  // Method to extract technical specs from item (adapted from device finder screen)
+  List<Map<String, dynamic>> _extractSpecsFromTechnicalSpecs(Item item) {
+    List<Map<String, dynamic>> specs = [];
+    
+    if (item.technicalSpecs != null && item.technicalSpecs!.isNotEmpty) {
+      // Define priority order for specs to display
+      List<String> priorityKeys = ['ram', 'storage', 'rom', 'battery', 'screen_size', 'screensize', 'display', 'camera', 'processor', 'brand'];
+      
+      // First, add specs in priority order
+      for (String priorityKey in priorityKeys) {
+        String? value = item.technicalSpecs![priorityKey] ?? 
+                       item.technicalSpecs![priorityKey.toLowerCase()] ??
+                       item.technicalSpecs![priorityKey.toUpperCase()];
+        
+        if (value != null && value.isNotEmpty) {
+          specs.add({
+            'icon': _getIconForSpec(priorityKey),
+            'text': '${_formatFilterLabel(priorityKey)}: $value',
+          });
+          if (specs.length >= 3) break; // Limit to 3 specs
+        }
+      }
+      
+      // If we don't have enough specs, add others
+      if (specs.length < 3) {
+        for (MapEntry<String, String> entry in item.technicalSpecs!.entries) {
+          if (!priorityKeys.any((key) => key.toLowerCase() == entry.key.toLowerCase()) && 
+              entry.value.isNotEmpty) {
+            specs.add({
+              'icon': _getIconForSpec(entry.key),
+              'text': '${_formatFilterLabel(entry.key)}: ${entry.value}',
+            });
+            if (specs.length >= 3) break;
+          }
+        }
+      }
+    }
+    
+    // If still no specs, add default ones
+    if (specs.isEmpty) {
+      specs = [
+        {'icon': Icons.star, 'text': 'Premium Quality'},
+        {'icon': Icons.verified, 'text': 'Warranty Included'},
+        {'icon': Icons.local_shipping, 'text': 'Fast Delivery'},
+      ];
+    }
+    
+    return specs;
+  }
+
+  // Method to get icon for technical specs (adapted from device finder screen)
+  IconData _getIconForSpec(String specKey) {
+    switch (specKey.toLowerCase()) {
+      case 'ram':
+        return Icons.memory;
+      case 'rom':
+      case 'storage':
+        return Icons.storage;
+      case 'battery':
+      case 'batterylife':
+      case 'battery_life':
+        return Icons.battery_full;
+      case 'screensize':
+      case 'screen_size':
+      case 'display':
+        return Icons.monitor;
+      case 'camera':
+      case 'cameramp':
+      case 'camera_mp':
+        return Icons.camera_alt;
+      case 'processor':
+      case 'cpu':
+        return Icons.settings_input_component;
+      case 'os':
+      case 'operating_system':
+        return Icons.smartphone;
+      case 'color':
+      case 'colour':
+        return Icons.palette;
+      case 'brand':
+        return Icons.business;
+      case 'weight':
+        return Icons.scale;
+      case 'connectivity':
+        return Icons.wifi;
+      default:
+        return Icons.info;
+    }
+  }
+
+  // Method to format filter labels (adapted from device finder screen)
+  String _formatFilterLabel(String key) {
+    // Convert technical spec keys to user-friendly labels
+    switch (key.toLowerCase()) {
+      case 'ram':
+        return 'RAM';
+      case 'rom':
+      case 'storage':
+        return 'Storage';
+      case 'screensize':
+      case 'screen_size':
+      case 'display':
+        return 'Screen Size';
+      case 'camera':
+      case 'cameramp':
+      case 'camera_mp':
+        return 'Camera';
+      case 'battery':
+      case 'batterylife':
+      case 'battery_life':
+        return 'Battery';
+      case 'processor':
+      case 'cpu':
+        return 'Processor';
+      case 'os':
+      case 'operating_system':
+        return 'Operating System';
+      case 'color':
+      case 'colour':
+        return 'Color';
+      case 'brand':
+        return 'Brand';
+      case 'model':
+        return 'Model';
+      case 'connectivity':
+        return 'Connectivity';
+      case 'weight':
+        return 'Weight';
+      default:
+        // Convert snake_case or camelCase to Title Case
+        return key.replaceAllMapped(
+          RegExp(r'[_\s]+|(?=[A-Z])'),
+          (match) => ' '
+        ).trim().split(' ').map((word) => 
+          word.isNotEmpty ? word[0].toUpperCase() + word.substring(1).toLowerCase() : ''
+        ).join(' ');
+    }
   }
 
   @override
@@ -123,19 +262,6 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
                       color: Colors.black,
                     ),
                   ),
-                  // SizedBox(width: 8),
-                  // Container(
-                  //   padding: EdgeInsets.all(4),
-                  //   decoration: BoxDecoration(
-                  //     color: Colors.blue,
-                  //     shape: BoxShape.circle,
-                  //   ),
-                  //   child: Icon(
-                  //     Icons.notifications,
-                  //     size: 16,
-                  //     color: Colors.white,
-                  //   ),
-                  // ),
                 ],
               ),
               actions: [
@@ -171,64 +297,7 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Welcome Section
-                  // Container(
-                  //   width: double.infinity,
-                  //   margin: EdgeInsets.all(16),
-                  //   padding: EdgeInsets.all(20),
-                  //   decoration: BoxDecoration(
-                  //     gradient: LinearGradient(
-                  //       colors: [Colors.blue.shade400, Colors.blue.shade600],
-                  //       begin: Alignment.topLeft,
-                  //       end: Alignment.bottomRight,
-                  //     ),
-                  //     borderRadius: BorderRadius.circular(16),
-                  //   ),
-                  //   child: Column(
-                  //     crossAxisAlignment: CrossAxisAlignment.start,
-                  //     children: [
-                  //       Text(
-                  //         'Welcome, Tech Enthusiast!',
-                  //         style: TextStyle(
-                  //           fontSize: 24,
-                  //           fontWeight: FontWeight.bold,
-                  //           color: Colors.white,
-                  //         ),
-                  //       ),
-                  //       SizedBox(height: 8),
-                  //       Text(
-                  //         'Discover the latest and greatest gadgets, devices,\nand tech innovations just for you.',
-                  //         style: TextStyle(
-                  //           fontSize: 14,
-                  //           color: Colors.white.withOpacity(0.9),
-                  //         ),
-                  //       ),
-                  //       SizedBox(height: 16),
-                  //       ElevatedButton(
-                  //         onPressed: () {
-                  //           // Start exploring action
-                  //         },
-                  //         style: ElevatedButton.styleFrom(
-                  //           backgroundColor: Colors.white,
-                  //           foregroundColor: Colors.blue.shade600,
-                  //           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                  //           shape: RoundedRectangleBorder(
-                  //             borderRadius: BorderRadius.circular(25),
-                  //           ),
-                  //         ),
-                  //         child: Text(
-                  //           'Start Exploring',
-                  //           style: TextStyle(
-                  //             fontWeight: FontWeight.w600,
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-
-                  // // Search Bar
-                  Padding(
+                       Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: TextField(
                       controller: homeScreenModel.searchController,
@@ -372,15 +441,10 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
                   list.isNotEmpty
                       ? Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: GridView.builder(
+                          child: ListView.separated(
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 1,
-                              childAspectRatio: 1.2,
-                              crossAxisSpacing: 16,
-                              mainAxisSpacing: 16,
-                            ),
+                          separatorBuilder: (context, index) => SizedBox(height: 16),
                             itemCount: list.length,
                             itemBuilder: (context, index) {
                               var item = list[index];
@@ -450,9 +514,12 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
     }
   }
 
-  // Updated Card builder for grid layout
+  // Updated Card builder for grid layout with technical specs
   Widget buildItemCard(Item item, BuildContext context, ItemsProvider itemsModel, CartProvider cartProvider) {
     final bool isAuthenticated = FirebaseAuth.instance.currentUser != null;
+    
+    // Extract specs from item's technicalSpecs
+    final specs = _extractSpecsFromTechnicalSpecs(item);
 
     return GestureDetector(
       onTap: () {
@@ -464,6 +531,7 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
         );
       },
       child: Container(
+        height: 320,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
@@ -480,7 +548,7 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
           children: [
             // Image Section with Favorite Button
             Expanded(
-              flex: 3,
+              flex: 2,
               child: Stack(
                 children: [
                   Hero(
@@ -557,20 +625,30 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
                       ),
                     ),
                     
-                    SizedBox(height: 4),
+                    SizedBox(height: 6),
                     
-                    // Description (shortened for grid)
-                    Text(
-                      item.description ?? '',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey[600],
-                        fontWeight: FontWeight.w400,
+                    // Technical Specs Section
+                    ...specs.take(3).map((spec) => Padding(
+                      padding: EdgeInsets.only(bottom: 2),
+                      child: Row(
+                        children: [
+                          Icon(spec['icon'], size: 12, color: Colors.grey[600]),
+                          SizedBox(width: 4),
+                          Expanded(
+                            child: Text(
+                              spec['text'],
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: Colors.grey[600],
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-
+                    )).toList(),
+                  
                     Spacer(),
 
                     // Price and Button Row
@@ -718,7 +796,7 @@ _homeDrawer(UserProvider userProvider, BuildContext context, HomeScreenProvider 
           ),
           _DrawerItem(
             title: 'My Orders',
-            icon: Icons.lunch_dining_outlined,
+            icon: Icons.delivery_dining_sharp,
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => OrderScreenMobile()),
@@ -880,22 +958,19 @@ class _EditNameDialogState extends State<_EditNameDialog> {
       content: TextField(
         controller: _nameController,
         decoration: InputDecoration(
-          hintText: 'Enter your name',
+          labelText: 'Name',
           border: OutlineInputBorder(),
         ),
-        textCapitalization: TextCapitalization.words,
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
           child: Text('Cancel'),
         ),
-        TextButton(
+        ElevatedButton(
           onPressed: () {
-            if (_nameController.text.trim().isNotEmpty) {
-              widget.onSave(_nameController.text.trim());
-              Navigator.pop(context);
-            }
+            widget.onSave(_nameController.text.trim());
+            Navigator.pop(context);
           },
           child: Text('Save'),
         ),
@@ -903,3 +978,4 @@ class _EditNameDialogState extends State<_EditNameDialog> {
     );
   }
 }
+

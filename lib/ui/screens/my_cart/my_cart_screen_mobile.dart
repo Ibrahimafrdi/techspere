@@ -180,9 +180,9 @@ class MyCartScreenMobile extends StatelessWidget {
                     Text(
                       'Rs. ${orderItem?.totalPrice.toStringAsFixed(0)}',
                       style: TextStyle(
-                        color: Colors.orange,
+                        color: Color(0xFF4A90E2),
                         fontWeight: FontWeight.w600,
-                        fontSize: 18,
+                        fontSize: 14,
                       ),
                     ),
                     CounterWidget(

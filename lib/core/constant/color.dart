@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const Color primaryColor = Colors.orangeAccent; // Color(0xFFEE8707);
+const Color primaryColor = Color(0xFF4A90E2);
 
 var totalOrderColor = Colors.pink;
 var pendingOrderColor = Colors.yellow;

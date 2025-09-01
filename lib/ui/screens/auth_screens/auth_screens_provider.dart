@@ -5,7 +5,6 @@ import 'package:delivery_app/core/services/database_services.dart';
 import 'package:delivery_app/core/view_models/base_view_model.dart';
 import 'package:delivery_app/locator.dart';
 import 'package:delivery_app/ui/screens/homeScreen/home_Screen.dart';
-import 'package:delivery_app/ui/screens/layout_templete/layout_templete.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -108,10 +107,10 @@ class AuthScreensProvider extends BaseViewModel {
                           Navigator.pop(context);
                           Navigator.pop(context);
                         } else {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (context) => LayoutTemplate()),
-                          );
+                          // Navigator.pushReplacement(
+                          //   context,
+                          //   MaterialPageRoute(builder: (context) => LayoutTemplate()),
+                          // );
                         }
                       }
                     }
@@ -169,7 +168,7 @@ Future<void> signInWithEmail(
     setState(ViewState.idle);
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => LayoutTemplate()),
+      MaterialPageRoute(builder: (context) => HomeScreen()),
     );
   } on FirebaseAuthException catch (e) {
     setState(ViewState.idle);
@@ -197,9 +196,9 @@ Future<void> registerWithEmail(
     reinitializeProviders(context);
 
     setState(ViewState.idle);
-    Navigator.pushReplacement(
+  Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => LayoutTemplate()),
+      MaterialPageRoute(builder: (context) => HomeScreen()),
     );
   } on FirebaseAuthException catch (e) {
     setState(ViewState.idle);

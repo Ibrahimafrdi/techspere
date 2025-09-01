@@ -146,24 +146,28 @@ class _AddressScreenMobileState extends State<AddressScreenMobile> {
             ),
           ),
         ),
-        body: Column(
-          children: [
-            Expanded(
-              child: Stack(
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Stack(
                 alignment: Alignment.center,
                 children: [
                   SafeArea(
-                    child: GoogleMap(
-                      initialCameraPosition: CameraPosition(
-                        target: _currentLocation,
-                        zoom: 15,
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.35,
+                      width: MediaQuery.of(context).size.width,
+                      child: GoogleMap(
+                        initialCameraPosition: CameraPosition(
+                          target: _currentLocation,
+                          zoom: 15,
+                        ),
+                        onMapCreated: (controller) => _mapController = controller,
+                        onCameraMove: _onCameraMove,
+                        myLocationEnabled: true,
+                        myLocationButtonEnabled: false,
+                        zoomControlsEnabled: false,
+                        mapToolbarEnabled: false,
                       ),
-                      onMapCreated: (controller) => _mapController = controller,
-                      onCameraMove: _onCameraMove,
-                      myLocationEnabled: true,
-                      myLocationButtonEnabled: false,
-                      zoomControlsEnabled: false,
-                      mapToolbarEnabled: false,
                     ),
                   ),
                   // Centered marker pin
@@ -289,152 +293,152 @@ class _AddressScreenMobileState extends State<AddressScreenMobile> {
                   ),
                 ],
               ),
-            ),
-            // Bottom section with consistent styling
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(20),
+              // Bottom section with consistent styling
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(20),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, -5),
+                    ),
+                  ],
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, -5),
-                  ),
-                ],
-              ),
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Complete Address Details',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  Container(
-                    padding: EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade50,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.black12),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildShippingAreaDropdown(),
-                        SizedBox(height: 16),
-                        TextField(
-                          controller: _addressController,
-                          decoration: InputDecoration(
-                            labelText: 'Complete Address',
-                            hintText: 'House#, Street#, city...',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide.none,
-                            ),
-                            filled: true,
-                            fillColor: Colors.white,
-                            prefixIcon:
-                            Icon(Icons.location_on, color: primaryColor),
-                            labelStyle: TextStyle(color: Colors.grey[600]),
-                          ),
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(
-                                RegExp(r'[a-zA-Z0-9\s,#\-./()]')),
-                          ],
-                          onChanged: (value) {
-                            final cleanedText = value.replaceAll(
-                                RegExp(r'[^a-zA-Z0-9\s,#\-./()]'), '');
-                            if (value != cleanedText) {
-                              _addressController.text = cleanedText;
-                              _addressController.selection =
-                                  TextSelection.fromPosition(
-                                    TextPosition(offset: cleanedText.length),
-                                  );
-                            }
-                          },
-                        ),
-                        SizedBox(height: 20),
-                        Text(
-                          'Save Address As',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black87,
-                          ),
-                        ),
-                        SizedBox(height: 12),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              _buildAddressTypeChip(homeString, Icons.home),
-                              SizedBox(width: 10),
-                              _buildAddressTypeChip(workString, Icons.work),
-                              SizedBox(width: 10),
-                              _buildAddressTypeChip(
-                                  otherString, Icons.location_on),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 24),
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          primaryColor,
-                          primaryColor.withOpacity(0.8),
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Complete Address Details',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.5,
                       ),
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: primaryColor.withOpacity(0.3),
-                          blurRadius: 12,
-                          offset: Offset(0, 4),
-                        ),
-                      ],
                     ),
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTap: _saveAddress,
+                    SizedBox(height: 20),
+                    Container(
+                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade50,
                         borderRadius: BorderRadius.circular(12),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(vertical: 16),
-                          child: Text(
-                            "Save Address",
-                            textAlign: TextAlign.center,
+                        border: Border.all(color: Colors.black12),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildShippingAreaDropdown(),
+                          SizedBox(height: 16),
+                          TextField(
+                            controller: _addressController,
+                            decoration: InputDecoration(
+                              labelText: 'Complete Address',
+                              hintText: 'House#, Street#, city...',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none,
+                              ),
+                              filled: true,
+                              fillColor: Colors.white,
+                              prefixIcon:
+                              Icon(Icons.location_on, color: primaryColor),
+                              labelStyle: TextStyle(color: Colors.grey[600]),
+                            ),
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'[a-zA-Z0-9\s,#\-./()]')),
+                            ],
+                            onChanged: (value) {
+                              final cleanedText = value.replaceAll(
+                                  RegExp(r'[^a-zA-Z0-9\s,#\-./()]'), '');
+                              if (value != cleanedText) {
+                                _addressController.text = cleanedText;
+                                _addressController.selection =
+                                    TextSelection.fromPosition(
+                                      TextPosition(offset: cleanedText.length),
+                                    );
+                              }
+                            },
+                          ),
+                          SizedBox(height: 20),
+                          Text(
+                            'Save Address As',
                             style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
+                              fontSize: 16,
                               fontWeight: FontWeight.w600,
-                              letterSpacing: 0.5,
+                              color: Colors.black87,
+                            ),
+                          ),
+                          SizedBox(height: 12),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                _buildAddressTypeChip(homeString, Icons.home),
+                                SizedBox(width: 10),
+                                _buildAddressTypeChip(workString, Icons.work),
+                                SizedBox(width: 10),
+                                _buildAddressTypeChip(
+                                    otherString, Icons.location_on),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 24),
+                    Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            primaryColor,
+                            primaryColor.withOpacity(0.8),
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: primaryColor.withOpacity(0.3),
+                            blurRadius: 12,
+                            offset: Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: _saveAddress,
+                          borderRadius: BorderRadius.circular(12),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16),
+                            child: Text(
+                              "Save Address",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 0.5,
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       );
     });

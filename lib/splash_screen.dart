@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:delivery_app/ui/screens/auth_screens/sign_in/signin_mobile.dart';
-import 'package:delivery_app/ui/screens/auth_screens/sign_up/signUpScreen.dart';
 import 'package:delivery_app/ui/screens/homeScreen/homeScreen_mobile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -32,29 +31,32 @@ class _SplashScreenState extends State<SplashScreen>
 
     _animation = Tween<double>(begin: 0.5, end: 1.0).animate(_controller);
 
-    _timer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
       setState(() {
         _currentDot = (_currentDot + 1) % 3;
       });
     });
 
-    Future.delayed(const Duration(seconds: 3), _navigateUser);
+    _startSplashScreen();
   }
 
-  void _navigateUser() {
-    if (!mounted) return;
+  Future<void> _startSplashScreen() async {
+    // Delay the navigation until the splash screen is shown
+    await Future.delayed(const Duration(seconds: 3)); // Splash screen delay
 
     if (_auth.currentUser != null) {
       // If user is logged in → go to Home
+      if (!mounted) return;
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) =>  HomeScreenMobile()), // or HomeScreen()
+        MaterialPageRoute(builder: (_) => const HomeScreenMobile()),
       );
     } else {
       // If user is not logged in → go to SignIn
+      if (!mounted) return;
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) =>  SignInScreen()),
+        MaterialPageRoute(builder: (_) => const SignInScreen()),
       );
     }
   }
@@ -102,7 +104,7 @@ class _SplashScreenState extends State<SplashScreen>
               children: [
                 // Centered logo
                 Image.asset(
-                  'assets/images/logo.jpg',
+                  'assets/images/techspere_logo.png',
                   height: 120,
                 ),
                 const SizedBox(height: 12),
@@ -114,7 +116,7 @@ class _SplashScreenState extends State<SplashScreen>
                   ),
                 ),
                 const SizedBox(height: 16),
-            
+
                 // Dots animation
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

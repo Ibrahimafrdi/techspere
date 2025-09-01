@@ -2,7 +2,6 @@ import 'package:delivery_app/core/constant/color.dart';
 import 'package:delivery_app/core/constant/string_constants.dart';
 import 'package:delivery_app/core/data_providers/user_provider.dart';
 import 'package:delivery_app/core/models/order.dart';
-import 'package:delivery_app/ui/screens/order_status_screen/OrderStatusScreen.dart';
 import 'package:delivery_app/ui/screens/order_status_screen/orderStatus_mobile.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -172,7 +171,7 @@ class ContainerList extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Order #${order.id?.substring(0, 8)}",
+                    "Order #${order.id}",
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,

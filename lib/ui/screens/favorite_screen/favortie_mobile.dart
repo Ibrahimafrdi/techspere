@@ -3,9 +3,8 @@ import 'package:delivery_app/core/data_providers/cart_provider.dart';
 import 'package:delivery_app/core/data_providers/items_provider.dart';
 import 'package:delivery_app/core/models/order_item.dart';
 import 'package:delivery_app/ui/custom_widgets/counter_widget.dart';
-import 'package:delivery_app/ui/screens/add_to_cart/add_to_cart.dart';
-import 'package:delivery_app/ui/screens/add_to_cart/addtocart_mobile.dart';
-import 'package:delivery_app/ui/screens/my_cart/my_cart_screen.dart';
+import 'package:delivery_app/ui/screens/my_cart/my_cart_screen_mobile.dart';
+import 'package:delivery_app/ui/screens/product_detail_screen/product_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:badges/badges.dart' as badges;
@@ -48,7 +47,7 @@ class FavoriteScreenMobile extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => MyCartScreen()),
+          MaterialPageRoute(builder: (context) => MyCartScreenMobile()),
         );
       },
       child: Consumer<CartProvider>(builder: (context, cartProvider, child) {
@@ -151,7 +150,7 @@ class FavoriteScreenMobile extends StatelessWidget {
         clipBehavior: Clip.hardEdge,
         child: item.imageUrl != null
             ? Image.network(item.imageUrl!, fit: BoxFit.cover)
-            : Image.asset('assets/images/wings.png.png', fit: BoxFit.scaleDown),
+            : Image.asset('assets/images/macbook 14.jpg', fit: BoxFit.scaleDown),
       ),
     );
   }
@@ -207,7 +206,7 @@ class FavoriteScreenMobile extends StatelessWidget {
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
-            fontSize: 18,
+            fontSize: 14,
           ),
         ),
         if (item.variations?.any((variation) => variation.isPrimary == true) ??
@@ -266,7 +265,7 @@ class FavoriteScreenMobile extends StatelessWidget {
           }
         },
         style: OutlinedButton.styleFrom(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: EdgeInsets.symmetric(horizontal: 10),
           side: BorderSide(
             color: primaryColor,
             width: 1.5,

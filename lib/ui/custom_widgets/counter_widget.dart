@@ -61,13 +61,13 @@ class _CounterWidgetState extends State<CounterWidget> {
             ),
           ),
         ),
-        SizedBox(width: 20), // Space between buttons and text
+        SizedBox(width: 10), // Space between buttons and text
         // Display Count
         Text(
           count.toString(),
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
-        SizedBox(width: 20), // Space between text and addition button
+        SizedBox(width: 10), // Space between text and addition button
         // Addition Button
         SizedBox(
           width: 25,
