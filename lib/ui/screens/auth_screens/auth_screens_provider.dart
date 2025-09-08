@@ -177,9 +177,11 @@ Future<void> signInWithEmail(
     );
   }
 }
+// ONLY THE UPDATED registerWithEmail METHOD
+// Replace your existing registerWithEmail method with this:
 
 Future<void> registerWithEmail(
-    String email, String password, BuildContext context) async {
+    String email, String password, String name, BuildContext context) async {
   setState(ViewState.busy);
   try {
     UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
@@ -187,16 +189,21 @@ Future<void> registerWithEmail(
       password: password,
     );
 
-    // Save user info in Firestore if needed
+    // Update Firebase Auth profile with display name
+    await userCredential.user!.updateDisplayName(name);
+    await userCredential.user!.reload();
+
+    // Save user info in Firestore
     appUser.id = userCredential.user!.uid;
     appUser.email = email;
+    appUser.name = name; // Save the name in your custom user object
     await authServices.register(appUser);
 
     // Reinitialize providers
     reinitializeProviders(context);
 
     setState(ViewState.idle);
-  Navigator.pushReplacement(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => HomeScreen()),
     );
@@ -207,8 +214,6 @@ Future<void> registerWithEmail(
     );
   }
 }
-
-
 
 
   Future<void> registerUser(
@@ -231,6 +236,67 @@ Future<void> registerWithEmail(
     }
   }
 
+
+// Add this method to your AuthScreensProvider class
+
+Future<void> resetPassword(String email, BuildContext context) async {
+  setState(ViewState.busy);
+  try {
+    await _auth.sendPasswordResetEmail(email: email);
+    setState(ViewState.idle);
+    
+    // Show success dialog
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Reset Link Sent'),
+          content: Text(
+            'A password reset link has been sent to $email. Please check your email and follow the instructions to reset your password.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close dialog
+                
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  } on FirebaseAuthException catch (e) {
+    setState(ViewState.idle);
+    String message;
+    switch (e.code) {
+      case 'user-not-found':
+        message = 'No user found with this email address.';
+        break;
+      case 'invalid-email':
+        message = 'The email address is not valid.';
+        break;
+      default:
+        message = e.message ?? 'Failed to send reset email.';
+    }
+    
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+      ),
+    );
+  } catch (e) {
+    setState(ViewState.idle);
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('An unexpected error occurred. Please try again.'),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+}
   @override
   void dispose() {
     phoneNumberController.dispose();

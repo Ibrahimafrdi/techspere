@@ -59,7 +59,7 @@ class OrderScreenMobile extends StatelessWidget {
               ? Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: const [
                 Icon(
                   Icons.shopping_bag_outlined,
                   size: 64,
@@ -127,7 +127,7 @@ class OrderScreenMobile extends StatelessWidget {
 class ContainerList extends StatelessWidget {
   final List<OrderModel> orders;
 
-  ContainerList({super.key, required this.orders});
+  const ContainerList({super.key, required this.orders});
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +137,7 @@ class ContainerList extends StatelessWidget {
       physics: NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         final order = orders[index];
-        var itemColor;
+        Color itemColor;
         switch (order.status) {
           case pendingOrderString:
             itemColor = pendingOrderColor;

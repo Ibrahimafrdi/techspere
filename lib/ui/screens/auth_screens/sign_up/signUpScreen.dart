@@ -13,8 +13,8 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   bool _obscurePassword = true;
@@ -40,6 +40,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 30),
+                TextFormField(
+                  controller: _nameController,
+                  decoration: InputDecoration(
+                    labelText: 'Username',
+                    hintText: 'Enter your name',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  keyboardType: TextInputType.name, // Changed from emailAddress
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please enter your name";
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 16),
 
                 /// Email Field
                 TextFormField(
@@ -131,15 +149,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 const SizedBox(height: 24),
 
-                /// Sign Up Button
+                /// Sign Up Button - UPDATED TO PASS NAME
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        await context.read<AuthScreensProvider>().registerWithEmail(
+                        await context
+                            .read<AuthScreensProvider>()
+                            .registerWithEmail(
                               _emailController.text.trim(),
                               _passwordController.text.trim(),
+                              _nameController.text.trim(), // Added name parameter
                               context,
                             );
                       }
@@ -151,8 +172,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child: const Text('Sign Up',
-                  style: TextStyle(color: Colors.white,fontSize: 16, fontWeight: FontWeight.bold),),
+                    child: const Text(
+                      'Sign Up',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
 
@@ -169,7 +195,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Expanded(child: Divider(thickness: 1)),
                   ],
                 ),
-  
+
                 const SizedBox(height: 20),
 
                 /// Already have account → Sign In

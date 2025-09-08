@@ -145,26 +145,26 @@ class CheckoutScreenMobile extends StatelessWidget {
           SizedBox(height: 12),
           Row(
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 6),
-                child: Row(
-                  children: [
-                    Image.asset(
-                      'assets/images/papkistani_flag.png',
-                      width: 24,
-                      height: 24,
-                    ),
-                    SizedBox(width: 4),
-                    Text(
-                      "+92",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 6),
+              //   child: Row(
+              //     children: [
+              //       Image.asset(
+              //         'assets/images/papkistani_flag.png',
+              //         width: 24,
+              //         height: 24,
+              //       ),
+              //       SizedBox(width: 4),
+              //       Text(
+              //         "+92",
+              //         style: TextStyle(
+              //           fontSize: 16,
+              //           fontWeight: FontWeight.w500,
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
               Expanded(
                 child: CustomTextField(
                   labelText: "Phone Number",
@@ -174,7 +174,7 @@ class CheckoutScreenMobile extends StatelessWidget {
                   keyboardType: TextInputType.phone,
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                    LengthLimitingTextInputFormatter(10),
+                    LengthLimitingTextInputFormatter(11),
                   ],
                 ),
               ),

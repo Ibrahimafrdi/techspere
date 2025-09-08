@@ -1,3 +1,4 @@
+import 'package:delivery_app/core/constant/string_constants.dart';
 import 'package:delivery_app/core/models/address.dart';
 import 'package:delivery_app/core/models/shipping.dart';
 import 'package:delivery_app/core/services/auth_services.dart';
@@ -35,7 +36,7 @@ class CheckoutScreenProvider extends BaseViewModel {
         subtotal: cartProvider.cart.subtotal,
         deliveryCharges: selectedShippingArea?.deliveryCharge ?? 0.0,
         discount: 0.0,
-        status: 'pending',
+        status: pendingOrderString,
         createdAt: DateTime.now(),
         deliveryAddress: selectedAddress,
       );

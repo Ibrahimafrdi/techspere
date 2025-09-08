@@ -12,13 +12,6 @@ import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // Only initialize if not already initialized
-  //WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp(
-  //   options: DefaultFirebaseOptions.currentPlatform,
-  // );
-
   if (Firebase.apps.isEmpty) {
     await Firebase.initializeApp();
   }

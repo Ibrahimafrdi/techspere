@@ -641,7 +641,7 @@ class _OrderStatusScreenMobileState extends State<OrderStatusScreenMobile> {
                           customTitle: Column(
                             children: [
                               Icon(
-                                Icons.restaurant,
+                                Icons.kitchen,
                                 color: activeStep >= 2
                                     ? primaryColor
                                     : Colors.grey.shade400,
@@ -971,55 +971,8 @@ class _OrderStatusScreenMobileState extends State<OrderStatusScreenMobile> {
             ],
           ),
         ),
-        floatingActionButton: Container(
-          margin: EdgeInsets.only(bottom: 24, right: 16),
-          child: GestureDetector(
-            onTap: () {
-              // Add support functionality
-            },
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 28, vertical: 16),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    primaryColor,
-                    primaryColor.withOpacity(0.8),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(30),
-                boxShadow: [
-                  BoxShadow(
-                    color: primaryColor.withOpacity(0.3),
-                    blurRadius: 12,
-                    offset: Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.headset_mic_rounded,
-                    color: Colors.white,
-                    size: 24,
-                  ),
-                  SizedBox(width: 12),
-                  Text(
-                    'Need Help?',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
+
+      
       );
     });
   }

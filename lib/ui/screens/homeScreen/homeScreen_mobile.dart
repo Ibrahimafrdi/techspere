@@ -37,14 +37,6 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
   @override
   void initState() {
     super.initState();
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   final itemsModel = Provider.of<ItemsProvider>(context, listen: false);
-    //   final homeScreenModel = Provider.of<HomeScreenProvider>(context, listen: false);
-
-    //   if (itemsModel.categories.isNotEmpty) {
-    //     homeScreenModel.setSelectedCategory(itemsModel.categories.first.id!);
-    //   }
-    // });
   }
 
   void _handleAuthenticationRequired(BuildContext context) {
@@ -59,17 +51,28 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
   // Method to extract technical specs from item (adapted from device finder screen)
   List<Map<String, dynamic>> _extractSpecsFromTechnicalSpecs(Item item) {
     List<Map<String, dynamic>> specs = [];
-    
-    if (item.technicalSpecs != null && item.technicalSpecs!.isNotEmpty) {
+
+    if (item.technicalSpecs.isNotEmpty) {
       // Define priority order for specs to display
-      List<String> priorityKeys = ['ram', 'storage', 'rom', 'battery', 'screen_size', 'screensize', 'display', 'camera', 'processor', 'brand'];
-      
+      List<String> priorityKeys = [
+        'ram',
+        'storage',
+        'rom',
+        'battery',
+        'screen_size',
+        'screensize',
+        'display',
+        'camera',
+        'processor',
+        'brand'
+      ];
+
       // First, add specs in priority order
       for (String priorityKey in priorityKeys) {
-        String? value = item.technicalSpecs![priorityKey] ?? 
-                       item.technicalSpecs![priorityKey.toLowerCase()] ??
-                       item.technicalSpecs![priorityKey.toUpperCase()];
-        
+        String? value = item.technicalSpecs[priorityKey] ??
+            item.technicalSpecs[priorityKey.toLowerCase()] ??
+            item.technicalSpecs[priorityKey.toUpperCase()];
+
         if (value != null && value.isNotEmpty) {
           specs.add({
             'icon': _getIconForSpec(priorityKey),
@@ -78,11 +81,12 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
           if (specs.length >= 3) break; // Limit to 3 specs
         }
       }
-      
+
       // If we don't have enough specs, add others
       if (specs.length < 3) {
-        for (MapEntry<String, String> entry in item.technicalSpecs!.entries) {
-          if (!priorityKeys.any((key) => key.toLowerCase() == entry.key.toLowerCase()) && 
+        for (MapEntry<String, String> entry in item.technicalSpecs.entries) {
+          if (!priorityKeys
+                  .any((key) => key.toLowerCase() == entry.key.toLowerCase()) &&
               entry.value.isNotEmpty) {
             specs.add({
               'icon': _getIconForSpec(entry.key),
@@ -93,7 +97,7 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
         }
       }
     }
-    
+
     // If still no specs, add default ones
     if (specs.isEmpty) {
       specs = [
@@ -102,7 +106,7 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
         {'icon': Icons.local_shipping, 'text': 'Fast Delivery'},
       ];
     }
-    
+
     return specs;
   }
 
@@ -186,26 +190,24 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
         return 'Weight';
       default:
         // Convert snake_case or camelCase to Title Case
-        return key.replaceAllMapped(
-          RegExp(r'[_\s]+|(?=[A-Z])'),
-          (match) => ' '
-        ).trim().split(' ').map((word) => 
-          word.isNotEmpty ? word[0].toUpperCase() + word.substring(1).toLowerCase() : ''
-        ).join(' ');
+        return key
+            .replaceAllMapped(RegExp(r'[_\s]+|(?=[A-Z])'), (match) => ' ')
+            .trim()
+            .split(' ')
+            .map((word) => word.isNotEmpty
+                ? word[0].toUpperCase() + word.substring(1).toLowerCase()
+                : '')
+            .join(' ');
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer4<ItemsProvider, UserProvider, HomeScreenProvider, CartProvider>(
-      builder: (context, itemsModel, userModel, homeScreenModel, cartProvider, child) {
+    return Consumer4<ItemsProvider, UserProvider, HomeScreenProvider,
+        CartProvider>(
+      builder: (context, itemsModel, userModel, homeScreenModel, cartProvider,
+          child) {
         final bool isAuthenticated = FirebaseAuth.instance.currentUser != null;
-
-        // Add debug prints
-        print('Selected category: ${homeScreenModel.selectedCategory}');
-        print('Available categories: ${itemsModel.categories.map((c) => c.id).toList()}');
-        print('Items by category: ${itemsModel.itemsByCategory.keys.toList()}');
-
         // In your UI
         if (homeScreenModel.isLoading) {
           return Center(child: CircularProgressIndicator());
@@ -214,13 +216,17 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
         var list = [];
         if (homeScreenModel.searchController.text.isNotEmpty) {
           list = itemsModel.items
-              .where((element) => element.title?.toLowerCase()
-                  .contains(homeScreenModel.searchController.text.toLowerCase()) ?? false)
+              .where((element) =>
+                  element.title?.toLowerCase().contains(
+                      homeScreenModel.searchController.text.toLowerCase()) ??
+                  false)
               .toList();
         } else if (homeScreenModel.selectedCategory != null) {
-          list = itemsModel.itemsByCategory[homeScreenModel.selectedCategory] ?? [];
+          list = itemsModel.itemsByCategory[homeScreenModel.selectedCategory] ??
+              [];
         } else if (itemsModel.categories.isNotEmpty) {
-          list = itemsModel.itemsByCategory[itemsModel.categories.first.id] ?? [];
+          list =
+              itemsModel.itemsByCategory[itemsModel.categories.first.id] ?? [];
         }
 
         if (list.isEmpty && homeScreenModel.searchController.text.isEmpty) {
@@ -253,7 +259,7 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
                 ),
               ),
               title: Row(
-                children: const[
+                children: const [
                   Text(
                     'TechSphere',
                     style: TextStyle(
@@ -269,7 +275,8 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => MyCartScreenMobile()),
+                      MaterialPageRoute(
+                          builder: (context) => MyCartScreenMobile()),
                     );
                   },
                   child: badges.Badge(
@@ -291,13 +298,15 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
                 SizedBox(width: 16)
               ],
             ),
-            drawer: isAuthenticated ? _homeDrawer(userModel, context, homeScreenModel) : null,
+            drawer: isAuthenticated
+                ? _homeDrawer(userModel, context, homeScreenModel)
+                : null,
             body: SingleChildScrollView(
               controller: _scrollController,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                       Padding(
+                  Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: TextField(
                       controller: homeScreenModel.searchController,
@@ -319,7 +328,8 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
                           CupertinoIcons.search,
                           color: Colors.grey[400],
                         ),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide.none,
@@ -362,8 +372,9 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
                         itemCount: itemsModel.categories.length,
                         itemBuilder: (context, index) {
                           final category = itemsModel.categories[index];
-                          final isSelected = homeScreenModel.selectedCategory == category.id;
-                          
+                          final isSelected =
+                              homeScreenModel.selectedCategory == category.id;
+
                           return GestureDetector(
                             onTap: () {
                               // Navigate to Device Finder screen
@@ -386,16 +397,22 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
                                     width: 60,
                                     height: 60,
                                     decoration: BoxDecoration(
-                                      color: isSelected ? Colors.blue.shade100 : Colors.white,
+                                      color: isSelected
+                                          ? Colors.blue.shade100
+                                          : Colors.white,
                                       borderRadius: BorderRadius.circular(16),
                                       border: Border.all(
-                                        color: isSelected ? Colors.blue : Colors.grey.shade200,
+                                        color: isSelected
+                                            ? Colors.blue
+                                            : Colors.grey.shade200,
                                         width: isSelected ? 2 : 1,
                                       ),
                                     ),
                                     child: Icon(
                                       _getCategoryIcon(category.name ?? ''),
-                                      color: isSelected ? Colors.blue : Colors.grey[600],
+                                      color: isSelected
+                                          ? Colors.blue
+                                          : Colors.grey[600],
                                       size: 28,
                                     ),
                                   ),
@@ -404,8 +421,12 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
                                     category.name ?? '',
                                     style: TextStyle(
                                       fontSize: 12,
-                                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                                      color: isSelected ? Colors.blue : Colors.black87,
+                                      fontWeight: isSelected
+                                          ? FontWeight.w600
+                                          : FontWeight.w500,
+                                      color: isSelected
+                                          ? Colors.blue
+                                          : Colors.black87,
                                     ),
                                     textAlign: TextAlign.center,
                                     maxLines: 1,
@@ -425,7 +446,7 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: Text(
-                      homeScreenModel.searchController.text.isEmpty 
+                      homeScreenModel.searchController.text.isEmpty
                           ? 'Personalized Picks'
                           : 'Search Results',
                       style: TextStyle(
@@ -444,11 +465,13 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
                           child: ListView.separated(
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
-                          separatorBuilder: (context, index) => SizedBox(height: 16),
+                            separatorBuilder: (context, index) =>
+                                SizedBox(height: 16),
                             itemCount: list.length,
                             itemBuilder: (context, index) {
                               var item = list[index];
-                              return buildItemCard(item, context, itemsModel, cartProvider);
+                              return buildItemCard(
+                                  item, context, itemsModel, cartProvider);
                             },
                           ),
                         )
@@ -474,7 +497,7 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
                             ),
                           ),
                         ),
-                  
+
                   SizedBox(height: 24),
                 ],
               ),
@@ -515,9 +538,10 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
   }
 
   // Updated Card builder for grid layout with technical specs
-  Widget buildItemCard(Item item, BuildContext context, ItemsProvider itemsModel, CartProvider cartProvider) {
+  Widget buildItemCard(Item item, BuildContext context,
+      ItemsProvider itemsModel, CartProvider cartProvider) {
     final bool isAuthenticated = FirebaseAuth.instance.currentUser != null;
-    
+
     // Extract specs from item's technicalSpecs
     final specs = _extractSpecsFromTechnicalSpecs(item);
 
@@ -556,7 +580,8 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
                     child: Container(
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(16)),
                       ),
                       clipBehavior: Clip.hardEdge,
                       child: item.imageUrl != null
@@ -591,8 +616,12 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
                           ],
                         ),
                         child: Icon(
-                          itemsModel.isFavorite(item) ? Icons.favorite : Icons.favorite_border,
-                          color: itemsModel.isFavorite(item) ? Colors.red : Colors.grey[600],
+                          itemsModel.isFavorite(item)
+                              ? Icons.favorite
+                              : Icons.favorite_border,
+                          color: itemsModel.isFavorite(item)
+                              ? Colors.red
+                              : Colors.grey[600],
                           size: 20,
                         ),
                       ),
@@ -624,31 +653,35 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    
+
                     SizedBox(height: 6),
-                    
+
                     // Technical Specs Section
-                    ...specs.take(3).map((spec) => Padding(
-                      padding: EdgeInsets.only(bottom: 2),
-                      child: Row(
-                        children: [
-                          Icon(spec['icon'], size: 12, color: Colors.grey[600]),
-                          SizedBox(width: 4),
-                          Expanded(
-                            child: Text(
-                              spec['text'],
-                              style: TextStyle(
-                                fontSize: 11,
-                                color: Colors.grey[600],
+                    ...specs
+                        .take(3)
+                        .map((spec) => Padding(
+                              padding: EdgeInsets.only(bottom: 2),
+                              child: Row(
+                                children: [
+                                  Icon(spec['icon'],
+                                      size: 12, color: Colors.grey[600]),
+                                  SizedBox(width: 4),
+                                  Expanded(
+                                    child: Text(
+                                      spec['text'],
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        color: Colors.grey[600],
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )).toList(),
-                  
+                            ))
+                        .toList(),
+
                     Spacer(),
 
                     // Price and Button Row
@@ -670,7 +703,9 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
                                   ),
                                 ),
                               ),
-                              if (item.variations?.any((element) => element.isPrimary ?? false) ?? false)
+                              if (item.variations?.any((element) =>
+                                      element.isPrimary ?? false) ??
+                                  false)
                                 Text(
                                   'Starting price',
                                   style: TextStyle(
@@ -682,29 +717,37 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
                             ],
                           ),
                         ),
-                        
+
                         // Add to Cart Button
                         Hero(
                           tag: 'button_${item.id}',
-                          child: cartProvider.cart.items?.any((orderItem) => orderItem.item?.id == item.id) ?? false
+                          child: cartProvider.cart.items?.any((orderItem) =>
+                                      orderItem.item?.id == item.id) ??
+                                  false
                               ? CounterWidget(
                                   count: cartProvider.cart.items!
-                                      .firstWhere((orderItem) => orderItem.item?.id == item.id)
+                                      .firstWhere((orderItem) =>
+                                          orderItem.item?.id == item.id)
                                       .quantity,
                                   onChanged: (newCount) {
-                                    OrderItem orderItem = cartProvider.cart.items!
-                                        .firstWhere((orderItem) => orderItem.item?.id == item.id);
+                                    OrderItem orderItem = cartProvider
+                                        .cart.items!
+                                        .firstWhere((orderItem) =>
+                                            orderItem.item?.id == item.id);
                                     if (newCount == 0) {
-                                      cartProvider.removeItemFromCart(orderItem);
+                                      cartProvider
+                                          .removeItemFromCart(orderItem);
                                     } else {
                                       orderItem.quantity = newCount;
-                                      cartProvider.updateItemQuantity(orderItem, newCount);
+                                      cartProvider.updateItemQuantity(
+                                          orderItem, newCount);
                                     }
                                   },
                                 )
                               : GestureDetector(
                                   onTap: () {
-                                    if ((item.variations?.isEmpty ?? true) && (item.addons?.isEmpty ?? true)) {
+                                    if ((item.variations?.isEmpty ?? true) &&
+                                        (item.addons?.isEmpty ?? true)) {
                                       cartProvider.addItemToCart(
                                         OrderItem(
                                           item: item,
@@ -717,7 +760,9 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => ProductDetailScreenMobile(item: item),
+                                          builder: (context) =>
+                                              ProductDetailScreenMobile(
+                                                  item: item),
                                         ),
                                       );
                                     }
@@ -750,50 +795,162 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
 }
 
 // Keep the existing drawer and dialog widgets unchanged
-_homeDrawer(UserProvider userProvider, BuildContext context, HomeScreenProvider homeScreenProvider) {
+_homeDrawer(UserProvider userProvider, BuildContext context,
+    HomeScreenProvider homeScreenProvider) {
   return Drawer(
     backgroundColor: Colors.white,
     child: SafeArea(
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          DrawerHeader(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  userProvider.appUser.name ?? "",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+       DrawerHeader(
+  decoration: BoxDecoration(
+    gradient: LinearGradient(
+      colors: [
+        Color(0xFF4A90E2),
+        Color(0xFF357ABD),
+        Color(0xFF2E5A87),
+      ],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      stops: [0.0, 0.6, 1.0],
+    ),
+    boxShadow: [
+      BoxShadow(
+        color: Colors.black26,
+        blurRadius: 8,
+        offset: Offset(0, 2),
+      ),
+    ],
+  ),
+  child: Container(
+    padding: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        // Profile Avatar
+        Stack(
+          children: [
+          Positioned(
+              child: Container(
+                width: 33,
+                height: 33,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 4,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
                 ),
-                Text(
-                  userProvider.appUser.phone ?? "",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                IconButton(
+                child: IconButton(
+                  padding: EdgeInsets.zero,
                   icon: Icon(
-                    Icons.edit_note_sharp,
-                    color: primaryColor,
-                    size: 25,
+                    Icons.edit,
+                    color: Color(0xFF4A90E2),
+                    size: 16,
                   ),
                   onPressed: () {
                     showDialog(
                       context: context,
                       builder: (context) => _EditNameDialog(
                         initialName: userProvider.appUser.name ?? "",
-                        onSave: (newName) {
-                          userProvider.updateUserName(newName);
+                        onSave: (newName) async {
+                          // Update in provider and Firebase
+                          await userProvider.updateUserName(newName);
+                          // Optionally show a success message
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Name updated successfully'),
+                              backgroundColor: Colors.green,
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
                         },
                       ),
                     );
                   },
                 ),
-              ],
+              ),
             ),
-          ),
+          
+          ],
+        ),
+        
+        SizedBox(height: 16),
+        
+        // User Name with loading state
+        StreamBuilder<User?>(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Container(
+                height: 20,
+                width: 100,
+                decoration: BoxDecoration(
+                  color: Colors.white30,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              );
+            }
+            
+            return Text(
+              userProvider.appUser.name?.isNotEmpty == true 
+                  ? userProvider.appUser.name! 
+                  : (snapshot.data?.displayName ?? "Guest User"),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+                letterSpacing: 0.5,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            );
+          },
+        ),
+        
+        SizedBox(height: 4),
+        
+        // User Email with loading state
+        StreamBuilder<User?>(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Container(
+                height: 14,
+                width: 120,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(7),
+                ),
+              );
+            }
+            
+            return Text(
+              userProvider.appUser.email?.isNotEmpty == true 
+                  ? userProvider.appUser.email! 
+                  : (snapshot.data?.email ?? "No email available"),
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.white70,
+                fontWeight: FontWeight.w400,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            );
+          },
+        ),
+      ],
+    ),
+  ),
+),
           _DrawerItem(
             title: 'My Orders',
             icon: Icons.delivery_dining_sharp,
@@ -875,7 +1032,8 @@ _homeDrawer(UserProvider userProvider, BuildContext context, HomeScreenProvider 
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: primaryColor,
-                              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 30, vertical: 12),
                             ),
                             child: Text(
                               'Logout',
@@ -978,4 +1136,3 @@ class _EditNameDialogState extends State<_EditNameDialog> {
     );
   }
 }
-

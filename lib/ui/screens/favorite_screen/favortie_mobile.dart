@@ -114,7 +114,7 @@ class FavoriteScreenMobile extends StatelessWidget {
         );
       },
       child: Container(
-        margin: EdgeInsets.only(bottom: 16),
+        margin: EdgeInsets.only(bottom: 12),
         padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
         height: 150,
         decoration: BoxDecoration(
@@ -157,7 +157,7 @@ class FavoriteScreenMobile extends StatelessWidget {
 
   Widget _buildItemDetails(item) {
     return Expanded(
-      flex: 3,
+      flex: 4,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -168,7 +168,7 @@ class FavoriteScreenMobile extends StatelessWidget {
               Text(
                 item.title ?? '',
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 14,
                   fontWeight: FontWeight.w600,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -177,6 +177,7 @@ class FavoriteScreenMobile extends StatelessWidget {
               Text(
                 item.description ?? '',
                 style: TextStyle(
+                  fontSize: 12,
                   color: Colors.black38,
                   fontWeight: FontWeight.w500,
                   overflow: TextOverflow.ellipsis,
@@ -275,7 +276,7 @@ class FavoriteScreenMobile extends StatelessWidget {
           ),
         ),
         child: Row(
-          children: [
+          children: const [
             Icon(
               Icons.add,
               size: 26,
@@ -300,11 +301,11 @@ class FavoriteScreenMobile extends StatelessWidget {
 
   Widget _buildFavoriteButton(item, ItemsProvider itemsProvider) {
     return Positioned(
-      right: 0,
-      top: 0,
+      right: -10,
+      top: -10,
       child: IconButton(
         icon: Icon(
-          Icons.favorite,
+          Icons.delete,
           color: Colors.red,
           size: 26,
         ),

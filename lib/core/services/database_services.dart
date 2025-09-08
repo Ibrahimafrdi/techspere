@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:delivery_app/core/models/address.dart';
 import 'package:delivery_app/core/models/appUser.dart';
 import 'package:delivery_app/core/models/cart.dart';
 import 'package:delivery_app/core/models/category.dart';

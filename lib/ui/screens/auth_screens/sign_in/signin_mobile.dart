@@ -1,5 +1,6 @@
 import 'package:delivery_app/core/enums/view_state.dart';
 import 'package:delivery_app/ui/screens/auth_screens/auth_screens_provider.dart';
+import 'package:delivery_app/ui/screens/auth_screens/forgot_screen/forgot_screen.dart';
 import 'package:delivery_app/ui/screens/auth_screens/sign_up/signUpScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -148,6 +149,11 @@ class _SignInScreenState extends State<SignInScreen> {
                         const SizedBox(height: 8),
                         TextButton(
                           onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>  ForgotPasswordScreen()),
+                            );
                             // TODO: implement forgot password
                           },
                           child: const Text(
