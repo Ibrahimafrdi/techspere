@@ -915,6 +915,12 @@ If user says "I need a phone with 8GB RAM under 30000", you might return:
                         ? Image.network(
                             item.imageUrl!,
                             fit: BoxFit.cover,
+                               errorBuilder: (context, error, stackTrace) {
+                                return Image.asset(
+                                  'assets/images/macbook 14.jpg',
+                                  fit: BoxFit.cover,
+                                );
+                              },
                           )
                         : Image.asset(
                             'assets/images/macbook 14.jpg',

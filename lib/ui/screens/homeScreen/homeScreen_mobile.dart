@@ -588,6 +588,12 @@ class _HomeScreenMobileState extends State<HomeScreenMobile> {
                           ? Image.network(
                               item.imageUrl!,
                               fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Image.asset(
+                                  'assets/images/macbook 14.jpg',
+                                  fit: BoxFit.cover,
+                                );
+                              },
                             )
                           : Image.asset(
                               'assets/images/macbook 14.jpg',

@@ -59,11 +59,11 @@ class CheckoutScreenMobile extends StatelessWidget {
                             return;
                           }
 
-                          if (checkoutProvider.phoneController.text.length != 10) {
+                          if (checkoutProvider.phoneController.text.length != 11) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                   content: Text(
-                                      'Phone number must be exactly 10 digits')),
+                                      'Phone number must be exactly 11 digits')),
                             );
                             return;
                           }
@@ -145,26 +145,8 @@ class CheckoutScreenMobile extends StatelessWidget {
           SizedBox(height: 12),
           Row(
             children: [
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(horizontal: 6),
-              //   child: Row(
-              //     children: [
-              //       Image.asset(
-              //         'assets/images/papkistani_flag.png',
-              //         width: 24,
-              //         height: 24,
-              //       ),
-              //       SizedBox(width: 4),
-              //       Text(
-              //         "+92",
-              //         style: TextStyle(
-              //           fontSize: 16,
-              //           fontWeight: FontWeight.w500,
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
+            
+ 
               Expanded(
                 child: CustomTextField(
                   labelText: "Phone Number",
@@ -346,7 +328,12 @@ class CheckoutScreenMobile extends StatelessWidget {
                           child: orderItem.item?.imageUrl != null
                               ? Image.network(
                             orderItem.item!.imageUrl!,
-                            fit: BoxFit.cover,
+                            fit: BoxFit.cover,   errorBuilder: (context, error, stackTrace) {
+                                return Image.asset(
+                                  'assets/images/macbook 14.jpg',
+                                  fit: BoxFit.cover,
+                                );
+                              },
                           )
                               : Image.asset(
                             'assets/images/macbook 14.jpg',
@@ -422,7 +409,6 @@ class CheckoutScreenMobile extends StatelessWidget {
         ?.deliveryCharge ??
         0.0;
     final total = subtotal + deliveryCharge;
-
     return Container(
       padding: EdgeInsets.all(16),
       margin: EdgeInsets.only(bottom: 16),

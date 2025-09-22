@@ -15,7 +15,8 @@ class OrderStatusScreenMobile extends StatefulWidget {
   OrderStatusScreenMobile({super.key, required this.orderId});
 
   @override
-  State<OrderStatusScreenMobile> createState() => _OrderStatusScreenMobileState();
+  State<OrderStatusScreenMobile> createState() =>
+      _OrderStatusScreenMobileState();
 }
 
 class _OrderStatusScreenMobileState extends State<OrderStatusScreenMobile> {
@@ -251,7 +252,7 @@ class _OrderStatusScreenMobileState extends State<OrderStatusScreenMobile> {
                     // Order ID and Date Section
                     Container(
                       padding:
-                      EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                          EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           tileMode: TileMode.clamp,
@@ -309,7 +310,7 @@ class _OrderStatusScreenMobileState extends State<OrderStatusScreenMobile> {
                               Text(
                                 orderModel.createdAt != null
                                     ? DateFormat('MMM d, yyyy • h:mm a')
-                                    .format(orderModel.createdAt!)
+                                        .format(orderModel.createdAt!)
                                     : '',
                                 style: TextStyle(
                                   fontSize: 14,
@@ -328,7 +329,7 @@ class _OrderStatusScreenMobileState extends State<OrderStatusScreenMobile> {
                     // Delivery Status Section
                     Container(
                       padding:
-                      EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                          EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(20),
@@ -372,38 +373,38 @@ class _OrderStatusScreenMobileState extends State<OrderStatusScreenMobile> {
                                         ),
                                         SizedBox(width: 8),
                                         (orderModel.status?.toLowerCase() ==
-                                            pendingOrderString
-                                                .toLowerCase() ||
-                                            orderModel.status
-                                                ?.toLowerCase() ==
-                                                acceptedOrderString
-                                                    .toLowerCase() ||
-                                            orderModel.status
-                                                ?.toLowerCase() ==
-                                                deliveredOrderString
-                                                    .toLowerCase() ||
-                                            orderModel.status
-                                                ?.toLowerCase() ==
-                                                canceledOrderString
-                                                    .toLowerCase() ||
-                                            orderModel.status
-                                                ?.toLowerCase() ==
-                                                rejectedOrderString
-                                                    .toLowerCase() ||
-                                            orderModel.status
-                                                ?.toLowerCase() ==
-                                                returnedOrderString
-                                                    .toLowerCase())
+                                                    pendingOrderString
+                                                        .toLowerCase() ||
+                                                orderModel.status
+                                                        ?.toLowerCase() ==
+                                                    acceptedOrderString
+                                                        .toLowerCase() ||
+                                                orderModel.status
+                                                        ?.toLowerCase() ==
+                                                    deliveredOrderString
+                                                        .toLowerCase() ||
+                                                orderModel.status
+                                                        ?.toLowerCase() ==
+                                                    canceledOrderString
+                                                        .toLowerCase() ||
+                                                orderModel.status
+                                                        ?.toLowerCase() ==
+                                                    rejectedOrderString
+                                                        .toLowerCase() ||
+                                                orderModel.status
+                                                        ?.toLowerCase() ==
+                                                    returnedOrderString
+                                                        .toLowerCase())
                                             ? Text(
-                                          '--',
-                                          style: TextStyle(
-                                            color: primaryColor,
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        )
+                                                '--',
+                                                style: TextStyle(
+                                                  color: primaryColor,
+                                                  fontSize: 24,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              )
                                             : _buildTimeDisplay(
-                                            _formatDuration(remainingTime)),
+                                                _formatDuration(remainingTime)),
                                       ],
                                     ),
                                   ),
@@ -434,8 +435,8 @@ class _OrderStatusScreenMobileState extends State<OrderStatusScreenMobile> {
                                         strokeWidth: 4,
                                         backgroundColor: Colors.grey.shade200,
                                         valueColor:
-                                        AlwaysStoppedAnimation<Color>(
-                                            primaryColor),
+                                            AlwaysStoppedAnimation<Color>(
+                                                primaryColor),
                                       ),
                                     ),
                                     Column(
@@ -484,7 +485,7 @@ class _OrderStatusScreenMobileState extends State<OrderStatusScreenMobile> {
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         "Delivery Address",
@@ -787,104 +788,112 @@ class _OrderStatusScreenMobileState extends State<OrderStatusScreenMobile> {
                           SizedBox(height: 16),
                           Column(
                             children: (orderModel.items
-                                ?.asMap()
-                                .entries
-                                .map((entry) {
-                              final orderItem = entry.value;
-                              final isNotLast = entry.key <
-                                  (orderModel.items?.length ?? 1) - 1;
+                                    ?.asMap()
+                                    .entries
+                                    .map((entry) {
+                                  final orderItem = entry.value;
+                                  final isNotLast = entry.key <
+                                      (orderModel.items?.length ?? 1) - 1;
 
-                              return Column(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        bottom: isNotLast ? 6 : 0),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          width: 80,
-                                          height: 80,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                            BorderRadius.circular(8),
-                                            border: Border.all(
-                                                color: Colors.black12),
-                                          ),
-                                          clipBehavior: Clip.hardEdge,
-                                          child: orderItem.item?.imageUrl !=
-                                              null
-                                              ? Image.network(
-                                            orderItem.item!.imageUrl!,
-                                            fit: BoxFit.cover,
-                                          )
-                                              : Image.asset(
-                                            'assets/images/macbook 14.jpg',
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                        SizedBox(width: 16),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                orderItem.item?.title ?? "",
-                                                style: TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight:
-                                                  FontWeight.w500,
-                                                ),
+                                  return Column(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            bottom: isNotLast ? 6 : 0),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              width: 80,
+                                              height: 80,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                                border: Border.all(
+                                                    color: Colors.black12),
                                               ),
-                                              if (orderItem
-                                                  .selectedVariations
-                                                  ?.isNotEmpty ??
-                                                  false) ...[
-                                                SizedBox(height: 8),
-                                                Text(
-                                                  "Variations: ${orderItem.selectedVariations?.entries.map((entry) => '${entry.key}: ${entry.value.join(", ")}').join(", ")}",
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    color: Colors.black54,
-                                                  ),
-                                                ),
-                                              ],
-                                              SizedBox(height: 8),
-                                              Row(
-                                                mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .spaceBetween,
+                                              clipBehavior: Clip.hardEdge,
+                                              child: orderItem.item?.imageUrl !=
+                                                      null
+                                                  ? Image.network(
+                                                      orderItem.item!.imageUrl!,
+                                                      fit: BoxFit.cover,
+                                                      errorBuilder: (context,
+                                                          error, stackTrace) {
+                                                        return Image.asset(
+                                                          'assets/images/macbook 14.jpg',
+                                                          fit: BoxFit.cover,
+                                                        );
+                                                      },
+                                                    )
+                                                  : Image.asset(
+                                                      'assets/images/macbook 14.jpg',
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                            ),
+                                            SizedBox(width: 16),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    'Rs. ${orderItem.totalPrice.toStringAsFixed(2)}',
+                                                    orderItem.item?.title ?? "",
                                                     style: TextStyle(
-                                                      color: Color(0xFF4A90E2),
+                                                      fontSize: 18,
                                                       fontWeight:
-                                                      FontWeight.w600,
+                                                          FontWeight.w500,
                                                     ),
                                                   ),
-                                                  Text(
-                                                    'Qty: ${orderItem.quantity}',
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                      FontWeight.w500,
+                                                  if (orderItem
+                                                          .selectedVariations
+                                                          ?.isNotEmpty ??
+                                                      false) ...[
+                                                    SizedBox(height: 8),
+                                                    Text(
+                                                      "Variations: ${orderItem.selectedVariations?.entries.map((entry) => '${entry.key}: ${entry.value.join(", ")}').join(", ")}",
+                                                      style: TextStyle(
+                                                        fontSize: 14,
+                                                        color: Colors.black54,
+                                                      ),
                                                     ),
+                                                  ],
+                                                  SizedBox(height: 8),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Text(
+                                                        'Rs. ${orderItem.totalPrice.toStringAsFixed(2)}',
+                                                        style: TextStyle(
+                                                          color:
+                                                              Color(0xFF4A90E2),
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        'Qty: ${orderItem.quantity}',
+                                                        style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ],
                                               ),
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                  if (isNotLast) Divider(thickness: 1),
-                                  SizedBox(height: 6),
-                                ],
-                              );
-                            }).toList() ??
+                                      ),
+                                      if (isNotLast) Divider(thickness: 1),
+                                      SizedBox(height: 6),
+                                    ],
+                                  );
+                                }).toList() ??
                                 []),
                           ),
                         ],
@@ -907,7 +916,7 @@ class _OrderStatusScreenMobileState extends State<OrderStatusScreenMobile> {
                           PriceSummaryRow(
                             title: 'Sub Total',
                             amount:
-                            'Rs ${orderModel.subtotal?.toStringAsFixed(0) ?? '0'}',
+                                'Rs ${orderModel.subtotal?.toStringAsFixed(0) ?? '0'}',
                             titleStyle: TextStyle(
                               fontSize: 16,
                               color: Colors.grey[600],
@@ -921,17 +930,17 @@ class _OrderStatusScreenMobileState extends State<OrderStatusScreenMobile> {
                           PriceSummaryRow(
                             title: 'Discount',
                             amount:
-                            'Rs ${orderModel.discount?.toStringAsFixed(0) ?? '0'}',
+                                'Rs ${orderModel.discount?.toStringAsFixed(0) ?? '0'}',
                             titleStyle: TextStyle(
                                 fontSize: 16, color: Colors.grey.shade700),
                             amountStyle:
-                            TextStyle(fontSize: 16, color: Colors.green),
+                                TextStyle(fontSize: 16, color: Colors.green),
                           ),
                           SizedBox(height: 16),
                           PriceSummaryRow(
                             title: 'Delivery Charges',
                             amount: orderModel.deliveryCharges != null &&
-                                (orderModel.deliveryCharges ?? 0) > 0
+                                    (orderModel.deliveryCharges ?? 0) > 0
                                 ? 'Rs ${orderModel.deliveryCharges?.toStringAsFixed(0) ?? '0'} '
                                 : 'FREE',
                             titleStyle: TextStyle(
@@ -949,7 +958,7 @@ class _OrderStatusScreenMobileState extends State<OrderStatusScreenMobile> {
                           PriceSummaryRow(
                             title: 'Total Amount',
                             amount:
-                            'Rs ${orderModel.total?.toStringAsFixed(0) ?? '0'}',
+                                'Rs ${orderModel.total?.toStringAsFixed(0) ?? '0'}',
                             titleStyle: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -971,8 +980,6 @@ class _OrderStatusScreenMobileState extends State<OrderStatusScreenMobile> {
             ],
           ),
         ),
-
-      
       );
     });
   }

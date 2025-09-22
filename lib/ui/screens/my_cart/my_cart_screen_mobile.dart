@@ -98,6 +98,12 @@ class MyCartScreenMobile extends StatelessWidget {
                   ? Image.network(
                 orderItem?.item?.imageUrl ?? '',
                 fit: BoxFit.cover,
+                   errorBuilder: (context, error, stackTrace) {
+                                return Image.asset(
+                                  'assets/images/macbook 14.jpg',
+                                  fit: BoxFit.cover,
+                                );
+                              },
               )
                   : Image.asset(
                 'assets/images/macbook 14.jpg',

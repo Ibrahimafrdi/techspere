@@ -528,7 +528,7 @@ class _AddressScreenMobileState extends State<AddressScreenMobile> {
                 items: shippingAreas.map((area) {
                   return DropdownMenuItem(
                     value: area,
-                    child: Text('${area.areaName},',style: TextStyle(color: Colors.white),),
+                    child: Text('${area.areaName},',style: TextStyle(color: Colors.grey),),
                   );
                 }).toList(),
                 onChanged: (value) {

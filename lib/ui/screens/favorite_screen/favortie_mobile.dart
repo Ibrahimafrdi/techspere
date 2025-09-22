@@ -129,10 +129,9 @@ class FavoriteScreenMobile extends StatelessWidget {
               children: [
                 _buildItemImage(item),
                 SizedBox(width: 10),
-                _buildItemDetails(item),
+                _buildItemDetails(item,itemsProvider),
               ],
             ),
-            _buildFavoriteButton(item, itemsProvider),
           ],
         ),
       ),
@@ -155,7 +154,7 @@ class FavoriteScreenMobile extends StatelessWidget {
     );
   }
 
-  Widget _buildItemDetails(item) {
+  Widget _buildItemDetails(item,ItemsProvider itemsProvider) {
     return Expanded(
       flex: 4,
       child: Column(
@@ -165,14 +164,21 @@ class FavoriteScreenMobile extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                item.title ?? '',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                maxLines: 1,
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      item.title ?? '',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      maxLines: 1,
+                    ),
+                  ),
+            _buildFavoriteButton(item, itemsProvider),
+                ],
               ),
               Text(
                 item.description ?? '',
@@ -301,15 +307,13 @@ class FavoriteScreenMobile extends StatelessWidget {
 
   Widget _buildFavoriteButton(item, ItemsProvider itemsProvider) {
     return Positioned(
-      right: -10,
-      top: -10,
-      child: IconButton(
-        icon: Icon(
+      child: GestureDetector(
+        child: Icon(
           Icons.delete,
           color: Colors.red,
           size: 26,
         ),
-        onPressed: () {
+        onTap: () {
           itemsProvider.toggleFavorite(item);
         },
       ),

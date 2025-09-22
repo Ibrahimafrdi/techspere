@@ -315,6 +315,12 @@ class ProductDetailScreenMobile extends StatelessWidget {
                     ? Image.network(
                         item.imageUrl!,
                         fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) {
+                                return Image.asset(
+                                  'assets/images/macbook 14.jpg',
+                                  fit: BoxFit.cover,
+                                );
+                              },
                       )
                     : Image.asset(
                         'assets/images/macbook 14.jpg',
